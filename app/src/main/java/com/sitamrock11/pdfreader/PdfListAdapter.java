@@ -1,6 +1,7 @@
 package com.sitamrock11.pdfreader;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,14 @@ public class PdfListAdapter extends RecyclerView.Adapter<PdfListAdapter.PdfListV
     @Override
     public void onBindViewHolder( PdfListViewHolder holder, int position) {
        holder.pdfName.setText(list.get(position).getName());
+       holder.itemView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent intent= new Intent(context,PdfViewerActivity.class);
+               intent.putExtra("position",position);
+               context.startActivity(intent);
+           }
+       });
     }
 
     @Override

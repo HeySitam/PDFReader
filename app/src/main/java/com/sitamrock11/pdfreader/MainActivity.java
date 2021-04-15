@@ -13,6 +13,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import java.io.File;
@@ -20,8 +21,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE=200;
-    private ArrayList<PDFInfo> pdfInfoList=new ArrayList<>();
-    private ArrayList<File> pdfFileList=new ArrayList<>();
+    private static ArrayList<PDFInfo> pdfInfoList=new ArrayList<>();
+    public static ArrayList<File> pdfFileList=new ArrayList<>();
     RecyclerView rvPdfList;
     private PdfListAdapter adapter=new PdfListAdapter(MainActivity.this);
     @Override
@@ -36,9 +37,10 @@ public class MainActivity extends AppCompatActivity {
             requestPermission();
         }else{
             Toast.makeText(this.getApplicationContext(),"Aso khelbo khela hobe !!",Toast.LENGTH_SHORT).show();
-            File dir=new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+            File dir=new File(Environment.getExternalStorageDirectory().toString());
             getfile(dir);
-            adapter.updateList(pdfInfoList);
+            System.out.println(pdfFileList.size());
+            adapter.updateList(pdfFileList);
         }
 
     }
@@ -49,15 +51,13 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < listFile.length; i++) {
 
                 if (listFile[i].isDirectory()) {
-                    pdfFileList.add(listFile[i]);
+                   // pdfFileList.add(listFile[i]);
                     getfile(listFile[i]);
 
                 } else {
                     if (listFile[i].getName().endsWith(".pdf"))
                     {
                         pdfFileList.add(listFile[i]);
-                        System.out.println(listFile[i].getName());
-                        pdfInfoList.add(new PDFInfo(listFile[i].getName()));
                     }
                 }
             }

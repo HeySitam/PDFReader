@@ -2,6 +2,7 @@ package com.sitamrock11.pdfreader;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,7 +15,10 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.MotionEvent;
+
 import android.widget.Toast;
+
+import com.skydoves.androidveil.VeilRecyclerFrameView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,15 +27,18 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE=200;
     private static ArrayList<PDFInfo> pdfInfoList=new ArrayList<>();
     public static ArrayList<File> pdfFileList=new ArrayList<>();
-    RecyclerView rvPdfList;
-    private PdfListAdapter adapter=new PdfListAdapter(MainActivity.this);
+    VeilRecyclerFrameView rvPdfList;
+    SearchView itemSearch;
+    PdfListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        rvPdfList=(RecyclerView)findViewById(R.id.rvPdfList);
+        itemSearch=findViewById(R.id.itemSearch);
+        rvPdfList=findViewById(R.id.rvPdfList);
         rvPdfList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        rvPdfList.setAdapter(MainActivity.this.adapter);
+        rvPdfList.addVeiledItems(15);
+        rvPdfList.veil();
 
         if(!checkPermission()){
             requestPermission();
@@ -39,9 +46,27 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this.getApplicationContext(),"Aso khelbo khela hobe !!",Toast.LENGTH_SHORT).show();
             File dir=new File(Environment.getExternalStorageDirectory().toString());
             getfile(dir);
+            adapter=new PdfListAdapter(MainActivity.this,pdfFileList);
+            rvPdfList.setAdapter(adapter);
+            if(pdfFileList.size()>0) rvPdfList.unVeil();
             System.out.println(pdfFileList.size());
-            adapter.updateList(pdfFileList);
+            //adapter.updateList(pdfFileList);
         }
+        itemSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+               //todo
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(!newText.isEmpty()) {
+                    adapter.getFilter().filter(newText);
+                }
+                return false;
+            }
+        });
 
     }
 

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp"
-        android:backgroundTint="#d3d3d3"
+        android:backgroundTint="#eeffff"
         app:strokeColor="@android:color/darker_gray"
         app:strokeWidth="2dp"
         app:cardCornerRadius="10dp">

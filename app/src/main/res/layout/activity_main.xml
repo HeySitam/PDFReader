@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         app:iconifiedByDefault="false"
-        app:queryHint="Search Your Pdf"/>
+        app:queryHint="Search Your Pdf..."/>
 
     <com.skydoves.androidveil.VeilRecyclerFrameView
         android:id="@+id/rvPdfList"
@@ -23,8 +23,8 @@
         app:veilFrame_layout="@layout/list_item"
         app:veilFrame_veiled="true"
         app:veilFrame_shimmerEnable="true"
-        app:veilFrame_baseColor="@android:color/holo_green_dark"
-        app:veilFrame_highlightColor="@android:color/holo_green_light"
+        app:veilFrame_baseColor="#bbdefb"
+        app:veilFrame_highlightColor="#eeffff"
         app:veilFrame_baseAlpha="0.6"
         app:veilFrame_highlightAlpha="1.0"
         app:veilFrame_radius="8dp" />

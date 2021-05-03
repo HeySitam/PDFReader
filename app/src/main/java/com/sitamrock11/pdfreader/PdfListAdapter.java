@@ -18,12 +18,11 @@ import java.util.List;
 
 public class PdfListAdapter extends RecyclerView.Adapter<PdfListAdapter.PdfListViewHolder> implements Filterable {
     Context context;
-    ArrayList<File> list;
+    public static ArrayList<File> list=new ArrayList<>();
     ArrayList<File> allList;
-    public PdfListAdapter(Context context,ArrayList<File>list){
-        this.list=list;
+    public PdfListAdapter(Context context){
         this.context=context;
-        allList=new ArrayList<File>(list);
+       // allList=new ArrayList<File>(list);
     }
     @Override
     public PdfListViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
@@ -54,6 +53,7 @@ public class PdfListAdapter extends RecyclerView.Adapter<PdfListAdapter.PdfListV
     void updateList(ArrayList newlist){
         list.clear();
         list.addAll(newlist);
+        allList=new ArrayList<File>(list);
         notifyDataSetChanged();
     }
 

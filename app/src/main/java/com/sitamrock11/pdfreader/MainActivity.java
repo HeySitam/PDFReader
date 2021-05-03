@@ -12,6 +12,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.MotionEvent;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<File> pdfFileList=new ArrayList<>();
     VeilRecyclerFrameView rvPdfList;
     SearchView itemSearch;
-    PdfListAdapter adapter;
+     PdfListAdapter adapter=new PdfListAdapter(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,17 +39,20 @@ public class MainActivity extends AppCompatActivity {
         rvPdfList=findViewById(R.id.rvPdfList);
         rvPdfList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         rvPdfList.addVeiledItems(15);
-        rvPdfList.veil();
 
         if(!checkPermission()){
             requestPermission();
         }else{
             Toast.makeText(this.getApplicationContext(),"Aso khelbo khela hobe !!",Toast.LENGTH_SHORT).show();
             File dir=new File(Environment.getExternalStorageDirectory().toString());
-            getfile(dir);
-            adapter=new PdfListAdapter(MainActivity.this,pdfFileList);
+            System.out.println(Environment.getExternalStorageDirectory().toString());
+          //  rvPdfList.unVeil();
+           // getfile(dir);
+
+           AsyncTaskRunner runner = new AsyncTaskRunner();
+            runner.execute(dir);
+          //  adapter=new PdfListAdapter(MainActivity.this,pdfFileList);
             rvPdfList.setAdapter(adapter);
-            if(pdfFileList.size()>0) rvPdfList.unVeil();
             System.out.println(pdfFileList.size());
             //adapter.updateList(pdfFileList);
         }
@@ -70,7 +74,38 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void getfile(File dir) {
+    private class AsyncTaskRunner extends AsyncTask<File, String, ArrayList<File>> {
+
+        private String resp;
+        @Override
+        protected ArrayList<File> doInBackground(File... params) {
+            return getfile(params[0]);
+        }
+
+
+        @Override
+        protected void onPostExecute(ArrayList<File> files) {
+            super.onPostExecute(files);
+           // pdfFileList.addAll(files);
+            adapter.updateList(files);
+            rvPdfList.unVeil();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            rvPdfList.veil();
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String... text) {
+
+
+        }
+    }
+
+    private ArrayList<File> getfile(File dir) {
         File listFile[]=dir.listFiles();
         if (listFile != null && listFile.length > 0) {
             for (int i = 0; i < listFile.length; i++) {
@@ -87,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        return pdfFileList;
     }
 
     private void requestPermission() {

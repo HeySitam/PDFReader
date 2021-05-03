@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class MainActivity2 extends AppCompatActivity {
     RecyclerView rvPdfList;
     public static ArrayList<File> fileList = new ArrayList<File>();
-    PdfListAdapter obj_adapter=new PdfListAdapter(MainActivity2.this,fileList);
+    PdfListAdapter obj_adapter=new PdfListAdapter(MainActivity2.this);
     public static int REQUEST_PERMISSIONS = 1;
     boolean boolean_permission;
     File dir;

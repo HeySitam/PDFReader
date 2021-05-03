@@ -21,7 +21,7 @@ public class PdfViewerActivity extends AppCompatActivity {
         pdfView=findViewById(R.id.viewPdf);
         Intent intent = getIntent();
         int position = intent.getIntExtra("position",-1);
-        pdf= MainActivity.pdfFileList.get(position);
+        pdf= PdfListAdapter.list.get(position);
 
         readPdf();
     }
